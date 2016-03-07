@@ -2,6 +2,7 @@
 #
 # Copyright 2006 Google Inc. All Rights Reserved.
 
+
 """Module for looking up symbolic debugging information.
 
 The information can include symbol names, offsets, and source locations.
@@ -46,7 +47,7 @@ def ToolPath(tool, toolchain_info=None):
   if not toolchain_info:
     toolchain_info = TOOLCHAIN_INFO
   (label, target) = toolchain_info
-  return os.path.join(ANDROID_BUILD_TOP, "prebuilt", Uname(), "toolchain", label, "bin",
+  return os.path.join(ANDROID_BUILD_TOP, "prebuilts", "gcc", Uname(), "arm", label, "bin",
                      target + "-" + tool)
 
 def FindToolchain():
@@ -65,12 +66,15 @@ def FindToolchain():
     ("arm-eabi-4.4.3", "arm-eabi"),
     ("arm-eabi-4.4.0", "arm-eabi"),
     ("arm-eabi-4.3.1", "arm-eabi"),
-    ("arm-eabi-4.2.1", "arm-eabi")
+    ("arm-eabi-4.2.1", "arm-eabi"),
+    ("arm-eabi-4.6", "arm-eabi")
   ]
 
   # Look for addr2line to check for valid toolchain path.
   for (label, target) in known_toolchains:
     toolchain_info = (label, target);
+    path = ToolPath("addr2line", toolchain_info)
+    print "looking for %s" % path
     if os.path.exists(ToolPath("addr2line", toolchain_info)):
       return toolchain_info
 
